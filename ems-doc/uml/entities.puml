@@ -1,0 +1,252 @@
+@startuml
+
+'===Classes
+
+class Appeal {
+    +id : long
+    +source : AppealSource
+    +phoneNumber : String NULL
+    +result : AppealResult
+    +technical : boolean
+    +calls : List<Call>
+    +createdWhen : Timestamp
+    +createdBy : Employee
+}
+
+enum AppealSource {
+    DEFAULT
+    PASSING
+    FROM_CREW
+    FROM_POLICE
+    FROM_FIRE
+    FROM_MED
+    ERROR
+}
+
+enum AppealResult {
+    CALL_STARTED
+    NOT_CALL
+    REDIRECTED
+    TRACKING
+}
+
+class Call {
+    +id : long
+    +createdWhen : Timestamp
+    +finishedWhen : Timestamp
+    +appeals : List<Appeal>
+    +address : Address
+'    +building : Building
+'    +apartment : Apartment
+'    +place : Place
+    +patient : Patient
+    +cause : Cause
+    +state : CallState
+    +description : String
+    +notes : List<CallNote>
+}
+
+class CallState {
+    +id : long
+    +call : Call
+    +status : CallStatus
+    +prevState : CallState
+    +createdBy : Employee
+    +createdWhen : Timestamp
+}
+
+enum CallStatus {
+    NOT_ASSINGED
+    ASSIGNED
+    MOVING
+    FINDING
+    TREATMENT
+    TRANSPORTATION
+    RETURN
+    FINISHED
+    ARCHIVED
+}
+
+class CallNote {
+    +id : long
+    +call : Call
+    +type : CallNoteType
+    +text : String
+}
+
+enum CallNoteType {
+    GENERAL
+    // TODO add more
+}
+
+enum Cause {
+    +name : String
+    +priority : int
+    -Cause (name : String, priority : int)
+}
+
+interface Address {
+    +id : long
+    +location : Location
+    +notes : List<AddressNote>
+}
+
+class Building {
+    +countryId : long
+    +
+}
+class Apartment {
+    TODO
+}
+class Place {
+    +mainName : PlaceName
+}
+
+class PlaceName {
+    +id : long
+    +place : Place
+    +name : String
+}
+
+class AddressNote {
+    +id : long
+    +note : String
+    +active : boolean
+}
+
+class MedAction {
+    +call : Call
+    +type : MedActionType
+    +item : MedItem NULL
+    +count : int NULL
+    +createdWhen : Timestamp
+    +createdBy : Employee
+}
+
+class Crew {
+    +members : List<Employee>
+    +car : Car
+    +state : CrewState
+    +currentCall : Call
+    +assignedCalls : List<Call>
+    +areaStatus : AreaStatus
+}
+
+class CrewState {
+    +id : long
+    +crew : Crew
+    +status : CrewStatus
+    +areaStatus : CrewAreaStatus
+    +prevState : CrewState
+    +createdBy : Employee
+    +createdWhen : Timestamp
+}
+
+enum CrewStatus {
+    ACTIVE
+    INACTIVE
+    INACTIVE_DINNER
+    DISABLED
+    DISABLED_FUEL
+    DISABLED_BROKEN
+}
+
+enum CrewAreaStatus {
+    ON_STATION
+    IN_AREA
+    OUT_AREA
+}
+
+class Car {
+    +id : long
+    +model : String
+    +number : String
+    +govNumber : String
+}
+
+class Shift {
+    +id : long
+    +createdWhen : Timestamp
+    +createdBy : Employee
+    +closedWhen : Timestamp
+    +closedBy : Employee
+    +position : Position
+    +employee : Employee
+}
+
+class Employee {
+    +id : long
+    +lastName : String
+    +firstName : String
+    +fatherName : String
+    +birthdate : Date
+    +positions : List<Position>
+}
+
+enum Position {
+    DRIVER
+    DISPATCHER
+    DOCTOR
+    ASSISTANT
+    STATION_DOCTOR
+    CHIEF_DOCTOR
+}
+
+'class Driver {
+'}
+
+'class Doctor {
+'}
+
+'class Dispatcher {
+'}
+
+class Patient {
+    +id : long
+    +lastName : String
+    +firstName : String
+    +fatherName : String
+    +birthdate : Date
+}
+
+'===End of Classes
+
+'===Relations
+
+Appeal "0..*" o-- "1" AppealSource
+Appeal "0..*" -- "1" AppealResult
+Call "0..*" -- "1..*" Appeal
+Call "0..*" -- "0..*" Crew : assignedCalls
+Call "1" -- "0..*" Crew : currentCall
+Call -- Address
+Call "1" *-- "1..*" CallState
+Call "1" *-- "0..*" CallNote
+Call "0..*" o-- "1" Cause
+Call "1" -- "0..*" MedAction
+CallState "0..1" <-- "0..1" CallState
+CallState "0..*" -- "1" CallStatus
+CallNote "0..*" o-- "1" CallNoteType
+
+Address <|-down- Building
+Address <|-down- Apartment
+Address <|-down- Place
+Place "1" -- "0..*" PlaceName
+Address "1" *-- "0..*" AddressNote
+Apartment "0..*" -up-> "1" Building
+
+Crew "1" -- "1..*" CrewState
+CrewState "0..1" -- "0..1" CrewState
+CrewState "0..*" -- "1" CrewStatus
+CrewState "0..*" -- "1" CrewAreaStatus
+Crew -- Car
+
+'Employee -down- Driver
+'Employee -down- Doctor
+'Employee -down- Dispatcher
+Employee -down- Shift
+Employee "0..*" -- "0..*" Position
+Shift "0..*" -down- "1" Position
+
+'===End of Relations
+
+@enduml
