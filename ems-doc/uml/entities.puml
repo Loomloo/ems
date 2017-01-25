@@ -92,8 +92,12 @@ interface Address {
 }
 
 class Building {
-    +countryId : long
-    +
+    +regionId: long
+    +areaId: long
+    +townId: long
+    +districtId: long NULL
+    +streetId: long
+    +number: int
 }
 class Apartment {
     TODO
