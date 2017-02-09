@@ -12,7 +12,7 @@ CREATE TABLE 		Car
 DROP TABLE IF EXISTS	Crew;
 CREATE TABLE 		Crew
 (
-  id 		bigint		PRIMARY KEY,
+  id 		  bigint		PRIMARY KEY,
   car		 	integer		NOT NULL,
   stage		 	text		NOT NULL,
   currentCall	 	integer		NOT NULL,
