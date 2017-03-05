@@ -6,7 +6,7 @@ CREATE TABLE 		Appeal
   phoneNumber		varchar(120)	NOT NULL,
   resuit		integer		NOT NULL,
   technical	 	boolean		NOT NULL,
-  calls	 		integer		NOT NULL,
+  calls	 	integer		NOT NULL,
   createdWhen		timestamp	NOT NULL,
   createdBy		integer		NOT NULL
     
