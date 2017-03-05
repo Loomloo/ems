@@ -14,7 +14,7 @@ CREATE TABLE 		Crew
 (
   id 		        bigint		PRIMARY KEY,
   car		 	integer		NOT NULL,
-  stage		 	text		NOT NULL,
+  stage		 	integer		NOT NULL,
   currentCall	 	integer		NOT NULL,
   assignedCalls		integer 	NOT NULL,
   areaStatus		text		NOT NULL
